@@ -1,0 +1,38 @@
+class Client(models.Model):
+    nom = models.CharField(max_length=100)
+    cognoms = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=100)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Producte(models.Model):
+    nom = models.CharField(max_length=100)
+    descripcio = models.TextField()
+    preu = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Carret(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    producte = models.ForeignKey(Producte, on_delete=models.CASCADE)
+    quantitat = models.PositiveIntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Comanda(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    carret = models.ForeignKey(Carret, on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    adreca_enviament = models.TextField()
+    estat = models.CharField(max_length=20, choices=[('pendent', 'Pendent'), ('enviat', 'Enviat'), ('entregat', 'Entregat')])
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Pagament(models.Model):
+    comanda = models.ForeignKey(Comanda, on_delete=models.CASCADE)
+    import_total = models.DecimalField(max_digits=10, decimal_places=2)
+    metode_pagament = models.CharField(max_length=20)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
