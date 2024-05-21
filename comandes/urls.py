@@ -1,6 +1,7 @@
-from django.contrib import admin
+# comandes/urls.py
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
+    path('historial/', views.historial_comandes, name='historial_comandes'),
 ]

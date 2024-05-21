@@ -8,3 +8,4 @@ urlpatterns = [
     path('api/comandes/', include('comandes.urls')),
     path('api/pago/', include('pago.urls')),
 ]
+
