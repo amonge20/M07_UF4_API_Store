@@ -9,4 +9,8 @@ from .serializers import ComandaSerializer
 def historial_comandes(request):
     comandes = Comanda.objects.all()
     serializer = ComandaSerializer(comandes, many=True)
+<<<<<<< HEAD
     return Response({'comandes': serializer.data})
+=======
+    return Response({'comandes': serializer.data})
+>>>>>>> origin/Estructura
