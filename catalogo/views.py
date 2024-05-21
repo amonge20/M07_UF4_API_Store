@@ -10,6 +10,7 @@ def ver_todos_productos(request):
     serializer = ProductoSerializer(productos, many=True)  
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def ver_producto_detalle(request, producto_id):
     try:
