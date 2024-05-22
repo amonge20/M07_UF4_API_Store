@@ -7,4 +7,6 @@ urlpatterns = [
     path('api/catalogo/', include('catalogo.urls')),
     path('api/comandes/', include('comandes.urls')),
     path('api/pago/', include('pago.urls')),
+    path('api-auth/', include('rest_framework.urls'))
+
 ]
