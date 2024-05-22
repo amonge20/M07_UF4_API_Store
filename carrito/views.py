@@ -152,3 +152,54 @@ def listaProductosCarrito(request, cart_id):
         'data': serializer.data
     }, status=status.HTTP_200_OK)
 
+# comprar
+@api_view(['POST'])
+def comprar(request, cart_id):
+    try:
+        cart = Cart.objects.get(id=cart_id, client=request.user, is_finalized=False)
+    except Cart.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'Carrito no encontrado o ya finalizado.'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    cart_items = CartItem.objects.filter(cart=cart)
+    
+    if not cart_items.exists():
+        return Response({
+            'status': 'error',
+            'message': 'El carrito está vacío.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Crear la orden
+    order = Order(client=cart.client, total_price=sum(item.product.price * item.quantity for item in cart_items))
+    order.save()
+    
+    for item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            quantity=item.quantity,
+            price=item.product.price
+        )
+    
+    # Finalizar el carrito
+    cart.is_finalized = True
+    cart.save()
+    
+    return Response({
+        'status': 'success',
+        'message': 'Compra realizada con éxito.',
+        'data': {
+            'order_id': order.id,
+            'total_price': order.total_price,
+            'products': [
+                {
+                    'product_id': item.product.id,
+                    'product_name': item.product.name,
+                    'quantity': item.quantity,
+                    'price': item.product.price,
+                } for item in cart_items
+            ]
+        }
+    }, status=status.HTTP_201_CREATED)
