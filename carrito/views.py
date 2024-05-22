@@ -61,3 +61,28 @@ def eliminarProducteCarrito(request, cart_id, product_id):
         'message': 'Producto eliminado del carrito.',
         'data': CartSerializer(cart).data
     }, status=status.HTTP_200_OK)
+
+# Eliminar carrito
+@api_view(['DELETE'])
+def eliminarCarrito(request, cart_id):
+    try:
+        cart = Cart.objects.get(id=cart_id, client=request.user, is_finalized=False)
+    except Cart.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'Carrito no encontrado o ya finalizado.'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    cart_items = CartItem.objects.filter(cart=cart)
+    for item in cart_items:
+        item.product.stock += item.quantity
+        item.product.save()
+        item.delete()
+    
+    cart.delete()
+    
+    return Response({
+        'status': 'success',
+        'message': 'Carrito eliminado completamente.'
+    }, status=status.HTTP_200_OK)
+
