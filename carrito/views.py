@@ -144,7 +144,7 @@ def listaProductosCarrito(request, cart_id):
         }, status=status.HTTP_404_NOT_FOUND)
     
     cart_items = CartItem.objects.filter(cart=cart)
-    serializer = CartItemSerializer(cart_items, many=True)
+    serializer = AddCartItemSerializer(cart_items, many=True)
     
     return Response({
         'status': 'success',
