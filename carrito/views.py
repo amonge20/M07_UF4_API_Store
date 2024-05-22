@@ -132,3 +132,23 @@ def modificarCantidadProducto(request, cart_id, product_id):
         'data': CartSerializer(cart).data
     }, status=status.HTTP_200_OK)
 
+# Consultar el listado de productos del carrito
+@api_view(['GET'])
+def listaProductosCarrito(request, cart_id):
+    try:
+        cart = Cart.objects.get(id=cart_id, client=request.user, is_finalized=False)
+    except Cart.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'Carrito no encontrado o ya finalizado.'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    cart_items = CartItem.objects.filter(cart=cart)
+    serializer = CartItemSerializer(cart_items, many=True)
+    
+    return Response({
+        'status': 'success',
+        'message': 'Listado de productos en el carrito.',
+        'data': serializer.data
+    }, status=status.HTTP_200_OK)
+
