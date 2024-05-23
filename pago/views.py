@@ -1,15 +1,15 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
-from comandes.models import Orden  # Asumiendo que las órdenes están en una aplicación llamada `comandes`
+from comandes.models import Comanda
+from .models import Payment
 from .serializers import PaymentSerializer
 import re
 
 def validar_tarjeta(numero_tarjeta):
     pattern = re.compile(r'^\d{16}$')
-    return pattern.match(numero_tarjeta)    
+    return pattern.match(numero_tarjeta)
 
 def validar_fecha_caducidad(fecha_caducidad):
     pattern = re.compile(r'^\d{2}/\d{2}$')
@@ -22,7 +22,7 @@ def validar_cvc(cvc):
 @api_view(['POST'])
 def pagar_comanda(request, comanda_id):
     try:
-        comanda = Orden.objects.get(pk=comanda_id, estado='abierta')
+        comanda = Comanda.objects.get(pk=comanda_id, estado='abierta')
     except ObjectDoesNotExist:
         return Response({"estado": "error", "mensaje": "La comanda no existe o no está abierta."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -36,6 +36,14 @@ def pagar_comanda(request, comanda_id):
         if not validar_cvc(datos['cvc']):
             return Response({"estado": "error", "mensaje": "CVC no válido."}, status=status.HTTP_400_BAD_REQUEST)
 
+        Payment.objects.create(
+            comanda=comanda,
+            numero_tarjeta=datos['numero_tarjeta'],
+            fecha_caducidad=datos['fecha_caducidad'],
+            cvc=datos['cvc'],
+            cantidad=datos['cantidad']
+        )
+
         comanda.estado = 'finalizada'
         comanda.save()
 
@@ -46,7 +54,7 @@ def pagar_comanda(request, comanda_id):
 @api_view(['GET'])
 def consultar_estado_comanda(request, comanda_id):
     try:
-        comanda = Orden.objects.get(pk=comanda_id)
+        comanda = Comanda.objects.get(pk=comanda_id)
     except ObjectDoesNotExist:
         return Response({"estado": "error", "mensaje": "La comanda no existe."}, status=status.HTTP_404_NOT_FOUND)
 

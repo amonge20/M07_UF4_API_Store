@@ -1,6 +1,7 @@
-from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
+    path('pagar/<int:comanda_id>/', views.pagar_comanda, name='pagar_comanda'),
+    path('estado/<int:comanda_id>/', views.consultar_estado_comanda, name='consultar_estado_comanda'),
 ]
