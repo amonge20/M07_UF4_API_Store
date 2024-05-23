@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Comandas No Finalizadas</title>
+</head>
+<body>
+    <h1>Historial de Comandas No Finalizadas</h1>
+    <ul>
+        {% for comanda in comandas %}
+            <li>{{ comanda.nombre }} - {{ comanda.fecha }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

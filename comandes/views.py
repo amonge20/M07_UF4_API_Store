@@ -13,5 +13,7 @@ def historial_comandes(request):
 @api_view(['GET'])
 def historial_comandes_cliente(request, cliente_id):
     cliente = get_object_or_404(Cliente, id=cliente_id)
-    serializer = ClienteSerializer(cliente)
-    return Response({'cliente': serializer.data})
+    comandes = Comanda.objects.filter(cliente=cliente) 
+    cliente_serializer = ClienteSerializer(cliente)
+    comanda_serializer = ComandaSerializer(comandes, many=True)
+    return Response({'cliente': cliente_serializer.data, 'comandes': comanda_serializer.data})
