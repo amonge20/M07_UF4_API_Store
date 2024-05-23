@@ -7,9 +7,4 @@ urlpatterns = [
     path('api/catalogo/', include('catalogo.urls')),
     path('api/comandes/', include('comandes.urls')),
     path('api/pago/', include('pago.urls')),
-<<<<<<< HEAD
 ]
-=======
-]
-
->>>>>>> origin/Estructura

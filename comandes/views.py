@@ -1,16 +1,17 @@
-# comandes/views.py
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Comanda
-from .serializers import ComandaSerializer
+from .models import Comanda, Cliente
+from .serializers import ComandaSerializer, ClienteSerializer
 
 @api_view(['GET'])
 def historial_comandes(request):
     comandes = Comanda.objects.all()
     serializer = ComandaSerializer(comandes, many=True)
-<<<<<<< HEAD
     return Response({'comandes': serializer.data})
-=======
-    return Response({'comandes': serializer.data})
->>>>>>> origin/Estructura
+
+@api_view(['GET'])
+def historial_comandes_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    serializer = ClienteSerializer(cliente)
+    return Response({'cliente': serializer.data})

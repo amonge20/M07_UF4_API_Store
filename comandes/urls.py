@@ -4,8 +4,5 @@ from . import views
 
 urlpatterns = [
     path('historial/', views.historial_comandes, name='historial_comandes'),
-<<<<<<< HEAD
+    path('historial/cliente/<int:cliente_id>/', views.historial_comandes_cliente, name='historial_comandes_cliente'),
 ]
-=======
-]
->>>>>>> origin/Estructura
