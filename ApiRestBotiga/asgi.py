@@ -1,5 +1,5 @@
 """
-ASGI config for Api_Store project.
+ASGI config for ApiRestBotiga project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Api_Store.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ApiRestBotiga.settings')
 
 application = get_asgi_application()

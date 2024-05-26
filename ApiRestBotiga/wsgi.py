@@ -1,5 +1,5 @@
 """
-WSGI config for Api_Store project.
+WSGI config for ApiRestBotiga project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Api_Store.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ApiRestBotiga.settings')
 
 application = get_wsgi_application()
